@@ -82,8 +82,10 @@ RSpec.describe 'The Bulk Discount Index' do
     save_and_open_page
     expect(page).to have_content("Discount Rate:#{@discount_1.discount_rate}")
     expect(page).to have_content("Discount Threshold:#{@discount_1.threshold}")
+    expect(page).to have_link("Discount: 1")
 
     expect(page).to have_content("Discount Rate:#{@discount_2.discount_rate}")
     expect(page).to have_content("Discount Threshold:#{@discount_2.threshold}")
+    expect(page).to have_link("Discount: 2")
   end
 end
