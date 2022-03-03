@@ -144,6 +144,10 @@ RSpec.describe 'the merchant dashboard' do
       expect(page).to have_content("#{@discount_2.quantity_threshold}")
 
       expect(page).to_not have_content("#{@discount_3.id}")
+
+      click_link("#{@discount_1.id}")
+
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts/#{@discount_1.id}")
     end
   end
 end
