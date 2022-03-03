@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'the merchant dashboard' do
   before (:each) do
     @merchant_1 = Merchant.create!(name: "Staples")
+    @merchant_2 = Merchant.create!(name: "Dunder_Miflin")
 
     @item_1 = @merchant_1.items.create!(name: "stapler", description: "Staples papers together", unit_price: 13)
     @item_2 = @merchant_1.items.create!(name: "paper", description: "construction", unit_price: 29)
@@ -120,6 +121,33 @@ RSpec.describe 'the merchant dashboard' do
         expect(@customer_4.name).to appear_before(@customer_5.name)
         expect(page).to_not have_content("#{@customer_6.name}, 34")
       end
+    end
+  end
+
+  describe 'Merchant Bulk Discounts' do
+    it "has an index page with attributes shown" do
+      @discount_1 = @merchant_1.bulk_discounts.create!(percentage: 15, quantity_threshold: 5)
+      @discount_2 = @merchant_1.bulk_discounts.create!(percentage: 20, quantity_threshold: 10)
+      @discount_3 = @merchant_2.bulk_discounts.create!(percentage: 10, quantity_threshold: 3)
+
+      visit "/merchants/#{@merchant_1.id}"
+
+      click_link("View All Discounts")
+
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts")
+
+      expect(page).to have_link("#{@discount_1.id}")
+      expect(page).to have_content("#{@discount_1.percentage}")
+      expect(page).to have_content("#{@discount_1.quantity_threshold}")
+      expect(page).to have_link("#{@discount_2.id}")
+      expect(page).to have_content("#{@discount_2.percentage}")
+      expect(page).to have_content("#{@discount_2.quantity_threshold}")
+
+      expect(page).to_not have_content("#{@discount_3.id}")
+
+      click_link("#{@discount_1.id}")
+
+      expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts/#{@discount_1.id}")
     end
   end
 end
