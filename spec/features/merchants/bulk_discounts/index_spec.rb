@@ -75,4 +75,15 @@ RSpec.describe 'The Bulk Discount Index' do
     click_on("View Bulk Discounts")
     expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts")
   end
+
+  it 'lists all bulk discounts, the thresholds, and discounts rates' do
+    visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+    within "discounts"
+    save_and_open_page
+    expect(page).to have_content("Discount Rate:#{@discount_1.discount_rate}")
+    expect(page).to have_content("Discount Threshold:#{@discount_1.threshold}")
+
+    expect(page).to have_content("Discount Rate:#{@discount_2.discount_rate}")
+    expect(page).to have_content("Discount Threshold:#{@discount_2.threshold}")
+  end
 end

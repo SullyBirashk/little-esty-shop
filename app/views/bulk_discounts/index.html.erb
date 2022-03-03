@@ -1,0 +1,7 @@
+<div id="discount #{discount.id}">
+<% @discounts.each_with_index do |discount, index| %>
+  <p>Discount:#<%= index +1  %></p>
+  <p>Discount Rate:<%= discount.discount_rate %></p>
+  <p>Discount Threshold:<%= discount.threshold %></p>
+<% end %>
+</div>
