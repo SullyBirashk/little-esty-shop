@@ -65,6 +65,9 @@ RSpec.describe 'The Bulk Discount Index' do
     @transcation_10 = @invoice_10.transactions.create!(credit_card_number: "4654405418249613", result: "success")
     @transcation_11 = @invoice_11.transactions.create!(credit_card_number: "4654405418249614", result: "success")
     @transcation_12 = @invoice_12.transactions.create!(credit_card_number: "4654405418249635", result: "failed")
+
+    @discount_1 = @merchant_1.bulk_discounts.create!(discount_rate: 10, threshold: 2)
+    @discount_2 = @merchant_1.bulk_discounts.create!(discount_rate: 25, threshold: 4)
   end
   it 'has a link on the merchant dashboard' do
     visit "/merchants/#{@merchant_1.id}/dashboard"
