@@ -12,7 +12,7 @@ RSpec.describe "Merchant Bulk Discounts Index Page" do
 
   it "Shows Upcoming Holidays" do
     visit "/merchants/#{@merchant_1.id}/bulk_discounts"
-save_and_open_page
+
     within ".upcoming_holidays" do
       expect(page).to have_content("Upcoming Holidays:")
       expect(page).to have_content("Good Friday")
