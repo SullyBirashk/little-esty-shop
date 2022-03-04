@@ -1,5 +1,14 @@
 <h1>Bulk Discounts Id's:</h1>
 
+<div class="upcoming_holidays">
+
+<h2>Upcoming Holidays:</h2>
+<% @holiday_names.each do |holiday| %>
+<p>Holiday Name: <%= holiday.name %></p>
+<p>Holiday Date: <%= holiday.date %></p>
+<% end %>
+</div>
+
 <% @bulk_discounts.each do |discount| %>
 <%= link_to "#{discount.id}", "/merchants/#{discount.merchant.id}/bulk_discounts/#{discount.id}" %>
 <p>Percentage Discounted: <%= discount.percentage %>% </p>
