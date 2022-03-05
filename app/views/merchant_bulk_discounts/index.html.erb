@@ -10,7 +10,7 @@
 </div>
 
 <div class="create_merchant">
-  <%= link_to "Create New Discount", "/merchants/#{@bulk_discounts.first.merchant.id}/bulk_discounts/new" %>
+  <%= link_to "Create New Discount", "/merchants/#{@merchant.id}/bulk_discounts/new" %>
 </div>
 
 <% @bulk_discounts.each do |discount| %>
