@@ -77,7 +77,7 @@ end
 
 RSpec.describe Customer do
   describe "class methods" do
-    it "can return the top 5 customers" do
+    xit "can return the top 5 customers" do
       customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
       customer_2 = Customer.create!(first_name: "Person 2", last_name: "Mcperson 2")
       customer_3 = Customer.create!(first_name: "Person 3", last_name: "Mcperson 3")
