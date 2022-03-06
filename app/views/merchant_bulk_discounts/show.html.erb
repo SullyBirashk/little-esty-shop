@@ -1,5 +1,8 @@
 <h1>Bulk Discount Id: <%= @bulk_discount.id %> </h1>
 
+<div class="edit_discount">
+  <%= link_to "Edit Bulk Discount #{@bulk_discount.id}", "/merchants/#{@merchant.id}/bulk_discounts/#{@bulk_discount.id}/edit"%>
+</div>
 
 <div class="attributes">
   <p>Percentage Discounted: <%= @bulk_discount.percentage %></p>
