@@ -13,7 +13,7 @@ RSpec.describe "Merchant Bulk Discounts Create Page" do
   it "Create New Merchant Bulk Discount" do
     visit "/merchants/#{@merchant_1.id}/bulk_discounts"
 
-    within '.create_merchant' do
+    within '.create_discount' do
       expect(page).to have_link("Create New Discount")
     end
 
