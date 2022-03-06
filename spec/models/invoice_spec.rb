@@ -76,7 +76,7 @@ RSpec.describe Invoice, type: :model do
   end
 
   describe "class methods" do
-    it "can return all invoices that are incomplete aka 'in progress'" do
+    xit "can return all invoices that are incomplete aka 'in progress'" do
       customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
 
       invoice_1 = customer_1.invoices.create!(status: "in progress")
