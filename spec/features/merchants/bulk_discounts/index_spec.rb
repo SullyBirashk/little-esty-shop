@@ -21,4 +21,20 @@ RSpec.describe "Merchant Bulk Discounts Index Page" do
       #expect(page).to_not have_content("New Year's Day")
     end
   end
+
+  it "Can Delete a Bulk Discount" do
+    visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+
+    within ".bulk_discounts" do
+      expect(page).to have_content("#{@discount_1.id}")
+
+      expect(page).to have_link("Delete Bulk Discount #{@discount_1.id}")
+    end
+
+    click_link("Delete Bulk Discount #{@discount_1.id}")
+
+    expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts")
+
+    expect(page).to_not have_content("#{@discount_1.id}")
+  end
 end
