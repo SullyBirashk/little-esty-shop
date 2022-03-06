@@ -1,0 +1,8 @@
+<h1>Edit Bulk Discount for <%= @merchant.name %></h1>
+<div id=edit_bulk_discount>
+  <%= render partial: 'form', locals: { path: "/merchants/#{@merchant.id}/bulk_discounts/#{@bulk_discount.id}",
+                                        method: :patch,
+                                        button_text: "Update Bulk Discount"
+                                        }
+                                        %>
+</div>
