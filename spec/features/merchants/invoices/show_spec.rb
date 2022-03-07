@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.describe "Merchant Invoices Show Page" do
   before (:each) do
     @merchant_1 = Merchant.create!(name: "Staples")
+    @merchant_2 = Merchant.create!(name: "Dunder_Miflin")
+
+    @discount_1 = @merchant_1.bulk_discounts.create!(percentage: 50, quantity_threshold: 4)
+    @discount_2 = @merchant_2.bulk_discounts.create!(percentage: 20, quantity_threshold: 10)
+    @discount_3 = @merchant_2.bulk_discounts.create!(percentage: 10, quantity_threshold: 3)
 
     @item_1 = @merchant_1.items.create!(name: "stapler", description: "Staples papers together", unit_price: 13)
     @item_2 = @merchant_1.items.create!(name: "paper", description: "construction", unit_price: 29)
@@ -28,6 +33,7 @@ RSpec.describe "Merchant Invoices Show Page" do
     @invoice_10 = @customer_4.invoices.create!(status: "completed")
     @invoice_11 = @customer_5.invoices.create!(status: "cancelled")
     @invoice_12 = @customer_6.invoices.create!(status: "in progress")
+    @invoice_15 = @customer_6.invoices.create!(status: "in progress")
 
     @invoice_item_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 13, status: "shipped")
     @invoice_item_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_2.id, quantity: 2, unit_price: 29, status: "packaged")
@@ -107,5 +113,19 @@ RSpec.describe "Merchant Invoices Show Page" do
 
     expect(page).to_not have_content("Status: shipped")
     expect(page).to have_content("Status: packaged")
+  end
+
+  it "shows revenue with and without discount applied" do
+    @invoice_item_15 = InvoiceItem.create!(invoice_id: @invoice_15.id, item_id: @item_1.id, quantity: 4, unit_price: 25, status: "shipped")
+
+    visit "/merchants/#{@merchant_1.id}/invoices/#{@invoice_15.id}"
+
+    within ".undiscounted_revenue" do
+      expect(page).to have_content("Total Revenue: 100")
+    end
+
+    within ".discounted_revenue" do
+      expect(page).to have_content("Toatal Discounted Revenue: 50")
+    end
   end
 end
