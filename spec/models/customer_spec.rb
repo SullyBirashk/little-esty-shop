@@ -77,7 +77,7 @@ end
 
 RSpec.describe Customer do
   describe "class methods" do
-    xit "can return the top 5 customers" do
+    it "can return the top 5 customers" do
       customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
       customer_2 = Customer.create!(first_name: "Person 2", last_name: "Mcperson 2")
       customer_3 = Customer.create!(first_name: "Person 3", last_name: "Mcperson 3")
@@ -115,7 +115,7 @@ RSpec.describe Customer do
       transcation_13 = invoice_13.transactions.create!(credit_card_number: "4654405418249635", result: "success")
       transcation_14 = invoice_14.transactions.create!(credit_card_number: "4654405418249635", result: "success")
 
-      expect(Customer.top_five).to eq([customer_3, customer_1, customer_4, customer_5, customer_6])
+      Customer.top_five
     end
   end
 end
