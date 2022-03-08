@@ -246,6 +246,8 @@ RSpec.describe Merchant, type: :model do
       invoice_item_6 = InvoiceItem.create!(invoice_id: invoice_6.id, item_id: item_6.id, quantity: 1, unit_price: 30, status: "shipped")
       invoice_item_7 = InvoiceItem.create!(invoice_id: invoice_7.id, item_id: item_7.id, quantity: 1, unit_price: 35, status: "shipped")
       invoice_item_8 = InvoiceItem.create!(invoice_id: invoice_8.id, item_id: item_8.id, quantity: 1, unit_price: 40, status: "shipped")
+
+      Merchant.top_five_merchants
     end
   end
 end

@@ -114,6 +114,8 @@ RSpec.describe Customer do
       transcation_12 = invoice_12.transactions.create!(credit_card_number: "4654405418249635", result: "success")
       transcation_13 = invoice_13.transactions.create!(credit_card_number: "4654405418249635", result: "success")
       transcation_14 = invoice_14.transactions.create!(credit_card_number: "4654405418249635", result: "success")
+
+      Customer.top_five
     end
   end
 end
