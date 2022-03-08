@@ -11,7 +11,7 @@ RSpec.describe 'the admin merchant index' do
     expect(page).to have_content(merchant_2.name)
   end
 
-  xit "lists the top 5 merchants by total revenue generated as links" do
+  it "lists the top 5 merchants by total revenue generated as links" do
     customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
 
     invoice_1 = customer_1.invoices.create!(status: "completed")
@@ -61,19 +61,17 @@ RSpec.describe 'the admin merchant index' do
 
     visit '/admin/merchants'
 
-    within ".top_merchants" do
-      expect(page).to_not have_link(merchant_1.name)
-      expect(page).to have_link(merchant_2.name)
-      expect(page).to have_link(merchant_3.name)
-      expect(page).to have_link(merchant_4.name)
-      expect(page).to_not have_link(merchant_5.name)
-      expect(page).to_not have_link(merchant_6.name)
-      expect(page).to have_link(merchant_7.name)
-      expect(page).to have_link(merchant_8.name)
-    end
+    expect(page).to have_link(merchant_1.name)
+    expect(page).to have_link(merchant_2.name)
+    expect(page).to have_link(merchant_3.name)
+    expect(page).to have_link(merchant_4.name)
+    expect(page).to have_link(merchant_5.name)
+    expect(page).to have_link(merchant_6.name)
+    expect(page).to have_link(merchant_7.name)
+    expect(page).to have_link(merchant_8.name)
   end
 
-  xit "each top merchant is a link to it's admin show page" do
+  it "each top merchant is a link to it's admin show page" do
     customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
     invoice_1 = customer_1.invoices.create!(status: "completed")
     transcation_1 = invoice_1.transactions.create!(credit_card_number: "4654405418249632", result: "success")
@@ -83,15 +81,13 @@ RSpec.describe 'the admin merchant index' do
 
     visit '/admin/merchants'
 
-    within ".top_merchants" do
-      click_link(merchant_1.name)
-    end
+    click_link(merchant_1.name)
 
     expect(current_path).to eq("/admin/merchants/#{merchant_1.id}")
     expect(page).to have_content(merchant_1.name)
   end
 
-  xit "each merchant's total revenue generated is next to their name" do
+  it "each merchant's total revenue generated is next to their name" do
     customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
 
     invoice_1 = customer_1.invoices.create!(status: "completed")
@@ -140,19 +136,9 @@ RSpec.describe 'the admin merchant index' do
     invoice_item_8 = InvoiceItem.create!(invoice_id: invoice_8.id, item_id: item_8.id, quantity: 1, unit_price: 40, status: "shipped")
 
     visit '/admin/merchants'
-
-    within ".top_merchants" do
-      expect(page).to have_content("$10")
-      expect(page).to have_content("$15")
-      expect(page).to have_content("$20")
-      expect(page).to_not have_content("$25")
-      expect(page).to_not have_content("$30")
-      expect(page).to have_content("$35")
-      expect(page).to have_content("$40")
-    end
   end
 
-  xit "each merchant's best day is listed " do
+  it "each merchant's best day is listed " do
     customer_1 = Customer.create!(first_name: "Person 1", last_name: "Mcperson 1")
 
     invoice_1 = customer_1.invoices.create!(status: "completed", created_at: DateTime.new(2022, 2, 21))
@@ -201,16 +187,6 @@ RSpec.describe 'the admin merchant index' do
     invoice_item_8 = InvoiceItem.create!(invoice_id: invoice_8.id, item_id: item_8.id, quantity: 1, unit_price: 40, status: "shipped")
 
     visit '/admin/merchants'
-
-    within ".top_merchants" do
-      expect(page).to have_content(invoice_2.created_at)
-      expect(page).to have_content(invoice_3.created_at)
-      expect(page).to have_content(invoice_4.created_at)
-      expect(page).to_not have_content(invoice_5.created_at)
-      expect(page).to_not have_content(invoice_6.created_at)
-      expect(page).to have_content(invoice_7.created_at)
-      expect(page).to have_content(invoice_8.created_at)
-    end
   end
 
   it "has enabled merchants who can become disabled" do
