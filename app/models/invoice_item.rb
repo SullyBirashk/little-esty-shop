@@ -9,4 +9,8 @@ class InvoiceItem < ApplicationRecord
   validates_presence_of :quantity
   validates_presence_of :unit_price
   validates_presence_of :status
+
+  def self.revenue
+      sum('quantity * unit_price')
+  end
 end
