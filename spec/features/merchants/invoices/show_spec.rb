@@ -48,19 +48,6 @@ RSpec.describe "Merchant Invoices Show Page" do
     @invoice_item_11 = InvoiceItem.create!(invoice_id: @invoice_11.id, item_id: @item_3.id, quantity: 5, unit_price: 84, status: "packaged")
     @invoice_item_12 = InvoiceItem.create!(invoice_id: @invoice_12.id, item_id: @item_4.id, quantity: 6, unit_price: 25, status: "pending")
 
-    @transcation_1 = @invoice_1.transactions.create!(credit_card_number: "4654405418249632", result: "success")
-    @transcation_2 = @invoice_2.transactions.create!(credit_card_number: "4654405418249634", result: "success")
-    @transcation_3 = @invoice_3.transactions.create!(credit_card_number: "4654405418249635", result: "success")
-    @transcation_4 = @invoice_4.transactions.create!(credit_card_number: "4654405418249636", result: "success")
-    @transcation_5 = @invoice_5.transactions.create!(credit_card_number: "4654405418249637", result: "success")
-    @transcation_6 = @invoice_6.transactions.create!(credit_card_number: "4654405418249638", result: "success")
-    @transcation_7 = @invoice_7.transactions.create!(credit_card_number: "4654405418249639", result: "success")
-    @transcation_8 = @invoice_8.transactions.create!(credit_card_number: "4654405418249630", result: "success")
-    @transcation_9 = @invoice_9.transactions.create!(credit_card_number: "4654405418249612", result: "success")
-    @transcation_10 = @invoice_10.transactions.create!(credit_card_number: "4654405418249613", result: "success")
-    @transcation_11 = @invoice_11.transactions.create!(credit_card_number: "4654405418249614", result: "success")
-    @transcation_12 = @invoice_12.transactions.create!(credit_card_number: "4654405418249635", result: "failed")
-
     @merchant_3 = Merchant.create!(name: "Dunder_Miflin_2.0")
 
     @discount_4 = @merchant_3.bulk_discounts.create!(percentage: 50, quantity_threshold: 4)
@@ -74,6 +61,21 @@ RSpec.describe "Merchant Invoices Show Page" do
     @invoice_item_20 = InvoiceItem.create!(invoice_id: @invoice_20.id, item_id: @item_20.id, quantity: 2, unit_price: 30, status: "shipped")
     @invoice_item_22 = InvoiceItem.create!(invoice_id: @invoice_20.id, item_id: @item_21.id, quantity: 5, unit_price: 10, status: "shipped")
     @invoice_item_23 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_22.id, quantity: 5, unit_price: 10, status: "shipped")
+
+    @merchant_4 = Merchant.create!(name: "Dunder_Miflin_2.0")
+
+    @discount_5 = @merchant_4.bulk_discounts.create!(percentage: 50, quantity_threshold: 10)
+    @discount_6 = @merchant_4.bulk_discounts.create!(percentage: 20, quantity_threshold: 12)
+
+    @item_23 = @merchant_4.items.create!(name: "mouse", description: "click", unit_price: 20)
+    @item_24 = @merchant_4.items.create!(name: "keyboard", description: "clack", unit_price: 40)
+    @item_25 = @merchant_4.items.create!(name: "test", description: "tea est", unit_price: 30)
+
+    @invoice_22 = @customer_1.invoices.create!(status: "completed")
+
+    @invoice_item_24 = InvoiceItem.create!(invoice_id: @invoice_22.id, item_id: @item_23.id, quantity: 5, unit_price: 10, status: "shipped")
+    @invoice_item_25 = InvoiceItem.create!(invoice_id: @invoice_22.id, item_id: @item_24.id, quantity: 12, unit_price: 10, status: "shipped")
+    @invoice_item_26 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_25.id, quantity: 7, unit_price: 5, status: "shipped")
   end
 
   it "displays the invoice id, status, when it was created and customer name" do
@@ -141,26 +143,21 @@ RSpec.describe "Merchant Invoices Show Page" do
   end
 
   it "chooses the Best Bulk discount" do
-    merchant_4 = Merchant.create!(name: "Dunder_Miflin_2.0")
-
-    discount_5 = merchant_4.bulk_discounts.create!(percentage: 50, quantity_threshold: 10)
-    discount_6 = merchant_4.bulk_discounts.create!(percentage: 20, quantity_threshold: 12)
-
-    item_23 = merchant_4.items.create!(name: "mouse", description: "click", unit_price: 20)
-    item_24 = merchant_4.items.create!(name: "keyboard", description: "clack", unit_price: 40)
-    item_25 = merchant_4.items.create!(name: "test", description: "tea est", unit_price: 30)
-
-    invoice_22 = @customer_1.invoices.create!(status: "completed")
-
-    invoice_item_24 = InvoiceItem.create!(invoice_id: invoice_22.id, item_id: item_23.id, quantity: 5, unit_price: 10, status: "shipped")
-    invoice_item_25 = InvoiceItem.create!(invoice_id: invoice_22.id, item_id: item_24.id, quantity: 12, unit_price: 10, status: "shipped")
-    invoice_item_26 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: item_25.id, quantity: 7, unit_price: 5, status: "shipped")
-
-    visit "/merchants/#{merchant_4.id}/invoices/#{invoice_22.id}"
+    visit "/merchants/#{@merchant_4.id}/invoices/#{@invoice_22.id}"
 
     within ".discounted_revenue" do
       expect(page).to have_content("Total Discounted Revenue: 110.0")
     end
+  end
 
+  it "next to each invoice item is a link to applied bulk_discount" do
+    visit "/merchants/#{@merchant_4.id}/invoices/#{@invoice_22.id}"
+
+    expect(page).to have_link("View Keyboard Discount")
+    expect(page).to_not have_link("View Mouse Discount")
+
+    click_link("View Keyboard Discount")
+
+    expect(current_path).to eq("/merchants/#{@merchant_4.id}/bulk_discounts/#{@discount_5.id}")
   end
 end
