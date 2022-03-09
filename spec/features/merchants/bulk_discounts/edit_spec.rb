@@ -32,4 +32,18 @@ RSpec.describe "Editing Merchant Bulk Discounts" do
       expect(page).to have_content(4)
     end
   end
+
+  it "won't save an application if not filled correctly" do
+    visit "/merchants/#{@merchant_1.id}/bulk_discounts/#{@discount_1.id}"
+
+    click_link("Edit Bulk Discount #{@discount_1.id}")
+
+    fill_in :percentage ,with: 25
+    fill_in :quantity_threshold ,with: ""
+    click_button "Update Bulk Discount"
+
+    expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts/#{@discount_1.id}/edit")
+
+    expect(page).to have_content("Error")
+  end
 end

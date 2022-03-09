@@ -18,7 +18,8 @@ RSpec.describe "Merchant Bulk Discounts Index Page" do
       expect(page).to have_content("Good Friday")
       expect(page).to have_content("Memorial Day")
       expect(page).to have_content("Juneteenth")
-      #expect(page).to_not have_content("New Year's Day")
+      
+      expect(page).to_not have_content("New Year's Day")
     end
   end
 

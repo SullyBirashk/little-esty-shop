@@ -17,6 +17,7 @@ class MerchantItemsController < ApplicationController
   def update
     merchant = Merchant.find(params[:merchant_id])
     item = Item.find(params[:id])
+
     if params[:_method] == 'patch'
       item.update(item_params)
       redirect_to "/merchants/#{merchant.id}/items/#{item.id}", notice: "Item Successfully Updated"
@@ -42,5 +43,4 @@ class MerchantItemsController < ApplicationController
     def item_params
       params.require(:item).permit(:name, :description, :unit_price, :status)
     end
-
 end

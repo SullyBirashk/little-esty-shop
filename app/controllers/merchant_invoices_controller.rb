@@ -15,5 +15,4 @@ class MerchantInvoicesController < ApplicationController
     altered_invoice_item.update(status: params[:status])
     redirect_to "/merchants/#{params[:merchant_id]}/invoices/#{params[:id]}"
   end
-
 end
