@@ -5,6 +5,9 @@ RSpec.describe 'the admin invoice show' do
     @merchant_1 = Merchant.create!(name: "Staples")
     @merchant_2 = Merchant.create!(name: "Dunder Miflin")
 
+    @discount_5 = @merchant_2.bulk_discounts.create!(percentage: 50, quantity_threshold: 10)
+    @discount_6 = @merchant_2.bulk_discounts.create!(percentage: 20, quantity_threshold: 12)
+
     @item_1 = @merchant_1.items.create!(name: "stapler", description: "Staples papers together", unit_price: 13)
     @item_2 = @merchant_1.items.create!(name: "paper", description: "construction", unit_price: 29)
     @item_3 = @merchant_2.items.create!(name: "calculator", description: "TI-84", unit_price: 84)
@@ -20,8 +23,8 @@ RSpec.describe 'the admin invoice show' do
 
     @invoice_item_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 13, status: "shipped")
     @invoice_item_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 2, unit_price: 29, status: "packaged")
-    @invoice_item_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 3, unit_price: 84, status: "pending")
-    @invoice_item_4 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_4.id, quantity: 4, unit_price: 25, status: "shipped")
+    @invoice_item_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 2, unit_price: 50, status: "pending")
+    @invoice_item_4 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_4.id, quantity: 20, unit_price: 5, status: "shipped")
   end
 
   it "Invoice Information in show page" do
@@ -69,5 +72,17 @@ RSpec.describe 'the admin invoice show' do
     expect(page).to_not have_content("Invoice Status: completed")
     expect(page).to have_content("Invoice Status: cancelled")
     expect(page).to_not have_content("Invoice Status: in progress")
+  end
+
+  it "Shows total revenue and discounted revenue for invoice" do
+    visit "/admin/invoices/#{@invoice_2.id}"
+
+    within ".total_revenue" do
+      expect(page).to have_content("Total Invoice Revenue: 200")
+    end
+
+    within ".discounted_revenue" do
+      expect(page).to have_content("Total Invoice Discounted Revenue: 150")
+    end
   end
 end

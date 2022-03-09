@@ -19,7 +19,7 @@ class Invoice < ApplicationRecord
   end
 
   def total_revenue_by_merchant(merchant_id)
-    x = items_by_merchant(merchant_id)
+    items_by_merchant(merchant_id)
     .pluck(Arel.sql("invoice_items.unit_price * invoice_items.quantity"))
     .sum
   end
@@ -29,7 +29,7 @@ class Invoice < ApplicationRecord
   end
 
   def bulk_discount
-   x = invoice_items.joins(:bulk_discounts)
+   invoice_items.joins(:bulk_discounts)
     .select("invoice_items.id, max(invoice_items.unit_price * invoice_items.quantity * (bulk_discounts.percentage)/100) as total_discount")
     .where("invoice_items.quantity >= bulk_discounts.quantity_threshold")
     .group("invoice_items.id")

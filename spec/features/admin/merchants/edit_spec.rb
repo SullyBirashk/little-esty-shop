@@ -15,9 +15,8 @@ RSpec.describe 'the admin merchant edit page' do
 
     visit"/admin/merchants/#{merchant_1.id}/edit"
 
-
-      fill_in :merchant_name, with: "Sams Club"
-      click_on 'Update Merchant'
+    fill_in :merchant_name, with: "Sams Club"
+    click_on 'Update Merchant'
 
     expect(current_path).to eq("/admin/merchants/#{merchant_1.id}")
 

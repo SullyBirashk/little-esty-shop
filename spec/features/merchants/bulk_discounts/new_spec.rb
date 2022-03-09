@@ -31,4 +31,18 @@ RSpec.describe "Merchant Bulk Discounts Create Page" do
 
     expect(page).to have_content("#{new_bulk_discount_id}")
   end
+
+  it "wont create new discount if filled incorrectly" do
+    visit "/merchants/#{@merchant_1.id}/bulk_discounts"
+
+    click_link("Create New Discount")
+
+    fill_in :percentage ,with: 25
+    fill_in :quantity_threshold ,with: ""
+    click_button "Create Bulk Discount"
+
+    expect(current_path).to eq("/merchants/#{@merchant_1.id}/bulk_discounts/new")
+
+    expect(page).to have_content("Error")
+  end
 end

@@ -18,8 +18,14 @@ class MerchantBulkDiscountsController < ApplicationController
 
   def create
     merchant = Merchant.find(params[:merchant_id])
-    merchant.bulk_discounts.create(bulk_discount_params)
-    redirect_to "/merchants/#{merchant.id}/bulk_discounts"
+    new = merchant.bulk_discounts.create(bulk_discount_params)
+
+    if new.save
+      redirect_to "/merchants/#{merchant.id}/bulk_discounts"
+    else
+      redirect_to "/merchants/#{merchant.id}/bulk_discounts/new"
+      flash[:alert] = "Error: #{error_message(new.errors)}"
+    end
   end
 
   def destroy
@@ -37,8 +43,13 @@ class MerchantBulkDiscountsController < ApplicationController
   def update
     @merchant = Merchant.find(params[:merchant_id])
     bulk_discount = BulkDiscount.find(params[:id])
-    bulk_discount.update(bulk_discount_params)
-    redirect_to "/merchants/#{@merchant.id}/bulk_discounts/#{bulk_discount.id}"
+
+    if bulk_discount.update(bulk_discount_params)
+      redirect_to "/merchants/#{@merchant.id}/bulk_discounts/#{bulk_discount.id}"
+    else
+      redirect_to "/merchants/#{@merchant.id}/bulk_discounts/#{bulk_discount.id}/edit"
+      flash[:alert] = "Error: #{error_message(new.errors)}"
+    end
   end
 
   private
@@ -46,6 +57,4 @@ class MerchantBulkDiscountsController < ApplicationController
   def bulk_discount_params
     params.permit(:percentage, :quantity_threshold)
   end
-
-
 end
